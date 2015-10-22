@@ -168,7 +168,7 @@ class LogTool {
         list($dir, $file) = explode('/', $path);
 
         // 目录不存在则建立目录
-        $dir = \app_path() . '/storage/logs/' . $dir;
+        $dir = storage_path() . '/logs/' . $dir;
         if(! file_exists($dir)) {
             mkdir($dir, 0777, TRUE);
             chmod($dir, 0777);

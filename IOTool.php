@@ -1,6 +1,8 @@
 <?php
 namespace hzkoala\DevTool;
 
+use Illuminate\Support\Facades\Cache;
+
 final class IOTool {
 
     /**
