@@ -201,4 +201,17 @@ final class IOTool {
             'msg' => $msg,
         ];
     }
+
+
+    /**
+     * 表单输入片段
+     *
+     * @param array $attr
+     * @param string $name
+     * @param string|number $value
+     * @return string
+     */
+    public static function InputSnippet($attr, $name, $value = null) {
+        return view('module.input', ['attr' => $attr, 'name' => $name, 'value' => $value])->render();
+    }
 }
