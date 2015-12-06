@@ -1,0 +1,11 @@
+{
+    "name": "hzkoala/DevTool",
+    "license": "proprietary",
+    "version": "2.0",
+    "autoload": {
+        "classmap": [
+            "/"
+        ]
+    },
+    "minimum-stability": "stable"
+}
