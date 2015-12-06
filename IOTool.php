@@ -214,4 +214,46 @@ final class IOTool {
     public static function InputSnippet($attr, $name, $value = null) {
         return view('module.input', ['attr' => $attr, 'name' => $name, 'value' => $value])->render();
     }
+
+
+    /**
+     * UDP通信
+     *
+     * @param string $ip
+     * @param int $port
+     * @param string $msg
+     * @return mixed
+     */
+    public static function udp($ip, $port, $msg) {
+        $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+        socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, ['sec' => 1, 'usec' => 0]);
+        socket_set_option($socket, SOL_SOCKET, SO_SNDTIMEO, ['sec' => 1, 'usec' => 0]);
+        @socket_sendto($socket, $msg, strlen($msg), 0, $ip, $port);
+        @socket_recvfrom($socket, $res, 1024, 0, $ip, $port);
+        socket_close($socket);
+
+        return $res;
+    }
+
+
+    /**
+     * TCP通信
+     *
+     * @param string $ip
+     * @param int $port
+     * @param string $msg
+     * @return mixed
+     */
+    public static function tcp($ip, $port, $msg) {
+        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+
+        socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, ['sec' => 3, 'usec' => 0]);
+        socket_set_option($socket, SOL_SOCKET, SO_SNDTIMEO, ['sec' => 3, 'usec' => 0]);
+        socket_connect($socket, $ip, $port);
+        socket_write($socket, $msg, strlen($msg));
+        $res = socket_read($socket, 1024);
+        socket_close($socket);
+
+        return $res;
+    }
 }
