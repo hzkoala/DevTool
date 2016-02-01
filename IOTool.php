@@ -187,18 +187,20 @@ final class IOTool {
     /**
      * 标准Api返回参数
      *
-     * @param bool $status
+     * @param mixed $status
      * @param array $data
      * @param string $msg
      * @param int $code
      * @return array
      */
     public static function ApiReturn($status, $data = [], $msg = '', $code = null) {
+        $status = boolval($status);
+
         return [
-            'status' => boolval($status),
+            'status' => $status,
             'data' => $data,
-            'code' => $code,
-            'msg' => $msg,
+            'code' => $status ? 0 : $code,
+            'msg' => $status ? '成功' : $msg,
         ];
     }
 
