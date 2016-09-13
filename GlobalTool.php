@@ -11,7 +11,7 @@ final class GlobalTool {
      * @throws \Exception
      */
     public static function checkException($item, $msg = '未定义错误', $code = 0) {
-        if (!$item) {
+        if(!$item) {
             throw new \Exception($msg, $code);
         }
     }
@@ -35,12 +35,12 @@ final class GlobalTool {
      */
     public static function debugData($data, $debugMode = 'print_r') {
         // 线上只能使用log模式
-        if ($GLOBALS['env'] == 'online' && $debugMode != 'log') {
+        if($GLOBALS['env'] == 'online' && $debugMode != 'log') {
             return FALSE;
         }
 
         // 不同类型
-        switch ($debugMode) {
+        switch($debugMode) {
             case 'var_dump': {
                 var_dump($data);
                 break;
@@ -51,8 +51,8 @@ final class GlobalTool {
             }
             case 'log':
             default: {
-            LogTool::log('debug/debug', $data);
-            break;
+                LogTool::log('debug/debug', $data);
+                break;
             }
         }
     }
@@ -68,10 +68,10 @@ final class GlobalTool {
      */
     public static function setArrayKey($array, $key, $isSort = FALSE) {
         $arr = array();
-        foreach ($array as $v) {
+        foreach($array as $v) {
             $arr[trim($v[$key])] = $v;
         }
-        if ($isSort) {
+        if($isSort) {
             ksort($arr);
         }
 
@@ -102,8 +102,8 @@ final class GlobalTool {
     public static function uniqueArrayByKey($array, $key) {
         $existList = [];
 
-        foreach ($array as $k => &$v) {
-            if (in_array($v[$key], $existList)) {
+        foreach($array as $k => &$v) {
+            if(in_array($v[$key], $existList)) {
                 unset($array[$k]);
             } else {
                 $existList[] = $v[$key];

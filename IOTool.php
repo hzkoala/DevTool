@@ -18,9 +18,9 @@ final class IOTool {
         ];
 
         $ip = null;
-        foreach ($dataList as $data) {
-            if (isset($data) && $data && strcasecmp($data, 'unknown')) {
-                if (strpos($data, ',') !== FALSE) {
+        foreach($dataList as $data) {
+            if(isset($data) && $data && strcasecmp($data, 'unknown')) {
+                if(strpos($data, ',') !== FALSE) {
                     $ip = explode(',', $data)[0];
                 } else {
                     $ip = $data;
@@ -47,9 +47,9 @@ final class IOTool {
     public static function requestByNameService($system, $service, $request = array(), $retry = 0, $cacheTime = 0, $cacheKey = '') {
         # cache
         // 有需要则取缓存
-        if ($cacheTime) {
+        if($cacheTime) {
             $cacheKey = $cacheKey ?: "{$system}-{$service}-" . md5(json_encode($request));
-            if ($cacheData = Cache::get($cacheKey)) {
+            if($cacheData = Cache::get($cacheKey)) {
                 return $cacheData;
             }
         }
@@ -66,21 +66,21 @@ final class IOTool {
         do {
             $response = NameService::request($system, $service, $req);
             $isRetry = !$response && $retry--;
-        } while ($isRetry);
+        } while($isRetry);
         $endTime = microtime(TRUE);
         LogTool::logApi($system, $service, $endTime - $startTime, $request, $response);
 
         # return
-        if (!$response) {
+        if(!$response) {
             return FALSE;
         }
 
         $response = json_decode($response, TRUE);
-        if (!is_array($response) || !$response['status']) {
+        if(!is_array($response) || !$response['status']) {
             return FALSE;
         } else {
             // 有需要则存储缓存
-            if ($cacheTime) {
+            if($cacheTime) {
                 Cache::put($cacheKey, $response['data'], $cacheTime);
             }
             return $response['data'] ?: TRUE;
@@ -103,9 +103,9 @@ final class IOTool {
     public static function request($system, $service, $request = array(), $retry = 0, $cacheTime = 0, $cacheKey = '', $method = 'get') {
         # cache
         // 有需要则取缓存
-        if ($cacheTime) {
+        if($cacheTime) {
             $cacheKey = $cacheKey ?: "{$system}-{$service}-" . md5(json_encode($request));
-            if ($cacheData = Cache::get($cacheKey)) {
+            if($cacheData = Cache::get($cacheKey)) {
                 return $cacheData;
             }
         }
@@ -116,7 +116,7 @@ final class IOTool {
         do {
             $response = self::httpRequest($url, $method, $request);
             $isRetry = !$response && $retry--;
-        } while ($isRetry);
+        } while($isRetry);
         $endTime = microtime(TRUE);
         LogTool::logApi($system, $service, $endTime - $startTime, array(
             'url' => $url,
@@ -124,11 +124,11 @@ final class IOTool {
         ), $response);
 
         # return
-        if (!$response) {
+        if(!$response) {
             return FALSE;
         } else {
             // 有需要则存储缓存
-            if ($cacheTime) {
+            if($cacheTime) {
                 Cache::put($cacheKey, $response, $cacheTime);
             }
             return $response;
@@ -149,17 +149,17 @@ final class IOTool {
         # action
         $ch = curl_init();
 
-        if (strtolower($method) == 'post') {
+        if(strtolower($method) == 'post') {
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
         } else {
-            if (strpos($url, '?') !== FALSE) {
-                foreach ($fields as $k => $v) {
+            if(strpos($url, '?') !== FALSE) {
+                foreach($fields as $k => $v) {
                     $url .= "&{$k}={$v}";
                 }
             } else {
                 $url .= '?';
-                foreach ($fields as $k => $v) {
+                foreach($fields as $k => $v) {
                     $url .= "{$k}={$v}&";
                 }
             }
@@ -172,7 +172,7 @@ final class IOTool {
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0');
 
         // 额外参数设置
-        foreach ($curlSets as $k => $v) {
+        foreach($curlSets as $k => $v) {
             curl_setopt($ch, $k, $v);
         }
 
