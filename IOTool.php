@@ -198,8 +198,8 @@ final class IOTool {
 
         return [
             'status' => $status,
-            'code' => $status ? 0 : $code,
-            'msg' => $status ? '成功' : $msg,
+            'error_code' => $status ? 0 : $code,
+            'error_msg' => $status ? '成功' : $msg,
             'data' => $data,
         ];
     }
