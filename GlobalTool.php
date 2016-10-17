@@ -8,11 +8,16 @@ final class GlobalTool {
      * @param mixed $item
      * @param string $msg
      * @param int $code
+     * @throws AjaxException
      * @throws \Exception
      */
     public static function checkException($item, $msg = '未定义错误', $code = 0) {
         if(!$item) {
-            throw new \Exception($msg, $code);
+            if(\Request::ajax() || $GLOBALS['is_api']) {
+                throw new AjaxException(IOTool::ApiReturn(false, [], $msg, $code));
+            } else {
+                throw new \Exception($msg, $code);
+            }
         }
     }
 
