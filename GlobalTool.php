@@ -1,5 +1,7 @@
 <?php
 namespace hzkoala\DevTool;
+use October\Rain\Exception\AjaxException;
+
 final class GlobalTool {
 
     /**
