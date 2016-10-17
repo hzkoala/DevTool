@@ -1,5 +1,6 @@
 <?php
 namespace hzkoala\DevTool;
+
 use October\Rain\Exception\AjaxException;
 
 final class GlobalTool {
@@ -15,8 +16,11 @@ final class GlobalTool {
      */
     public static function checkException($item, $msg = '未定义错误', $code = 0) {
         if(!$item) {
-            if(\Request::ajax() || $GLOBALS['is_api']) {
+            if(\Request::ajax()) {
                 throw new AjaxException(IOTool::ApiReturn(false, [], $msg, $code));
+            } elseif($GLOBALS['is_api']) {
+                echo json_encode(IOTool::ApiReturn(false, [], $msg, $code));
+                exit();
             } else {
                 throw new \Exception($msg, $code);
             }
