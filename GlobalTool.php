@@ -2,6 +2,7 @@
 namespace hzkoala\DevTool;
 
 use October\Rain\Exception\AjaxException;
+use Rrbn\Rrbn\Exception\ApiException;
 
 final class GlobalTool {
 
@@ -12,6 +13,7 @@ final class GlobalTool {
      * @param string $msg
      * @param int $code
      * @throws AjaxException
+     * @throws ApiException
      * @throws \Exception
      */
     public static function checkException($item, $msg = '未定义错误', $code = 0) {
@@ -19,8 +21,7 @@ final class GlobalTool {
             if(\Request::ajax()) {
                 throw new AjaxException(IOTool::ApiReturn(false, [], $msg, $code));
             } elseif($GLOBALS['is_api']) {
-                echo json_encode(IOTool::ApiReturn(false, [], $msg, $code));
-                exit();
+                throw new ApiException(IOTool::ApiReturn(false, [], $msg, $code));
             } else {
                 throw new \Exception($msg, $code);
             }
