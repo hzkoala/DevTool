@@ -1,0 +1,11 @@
+{
+    "name": "hzkoala/DevTool",
+    "license": "proprietary",
+    "version": "3.0",
+    "autoload": {
+        "psr-4":  {
+            "hzkoala\\DevTool\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
