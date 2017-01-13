@@ -81,4 +81,23 @@ final class DbTool {
         # return
         return $query->get();
     }
+
+
+    /**
+     * 存在则返回ID, 否则新建
+     *
+     * @param $modelName
+     * @param $field
+     * @param $uniqueKey
+     * @return object
+     */
+    public static function saveOnField($modelName, $field, $uniqueKey) {
+        $uniqueField = [];
+        foreach($uniqueKey as $k) {
+            $uniqueField[$k] = $field[$k];
+        }
+        $model = $modelName::updateOrCreate($uniqueField, $field);
+
+        return $model;
+    }
 }

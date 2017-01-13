@@ -145,7 +145,7 @@ final class IOTool {
      * @param array $curlSets
      * @return mixed
      */
-    public static function httpRequest($url, $method, $fields = [], $curlSets = []) {
+    public static function httpRequest($url, $method = 'get', $fields = [], $curlSets = []) {
         # action
         $ch = curl_init();
 
@@ -257,5 +257,38 @@ final class IOTool {
         socket_close($socket);
 
         return $res;
+    }
+
+
+    /**
+     * HTTP请求(先取缓存)
+     *
+     * @param string $url
+     * @param string $method
+     * @param array $fields
+     * @param array $curlSets
+     * @param int $retry
+     * @return mixed
+     */
+    public static function httpRequestWithCache($url, $method = 'get', $fields = [], $curlSets = [], $retry = 0) {
+        $url = $url . '?' . http_build_query($fields);
+        if($cache = \DB::table('html')->where('url', $url)->get()[0]) {
+            if($cache->html) {
+                return $cache->html;
+            }
+        }
+
+        do {
+            $html = self::httpRequest($url, $method = 'get', $fields = [], $curlSets = []);
+            if(!$html) sleep(1);
+        } while(!$html && $retry--);
+
+        DbTool::saveOnField('Crawler\Common\Models\Html', [
+            'url' => $url,
+            'html' => $html,
+        ], ['url']);
+
+        # return
+        return $html;
     }
 }
