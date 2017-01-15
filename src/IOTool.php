@@ -280,13 +280,15 @@ final class IOTool {
 
         do {
             $html = self::httpRequest($url, $method = 'get', $fields = [], $curlSets = []);
-            if(!$html) sleep(1);
+            if($html) {
+                DbTool::saveOnField('Crawler\Common\Models\Html', [
+                    'url' => $url,
+                    'html' => $html,
+                ], ['url']);
+            } else {
+                sleep(1);
+            }
         } while(!$html && $retry--);
-
-        DbTool::saveOnField('Crawler\Common\Models\Html', [
-            'url' => $url,
-            'html' => $html,
-        ], ['url']);
 
         # return
         return $html;
