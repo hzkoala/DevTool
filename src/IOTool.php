@@ -167,9 +167,11 @@ final class IOTool {
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
         curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0');
+        curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36');
 
         // 额外参数设置
         foreach($curlSets as $k => $v) {
@@ -271,7 +273,8 @@ final class IOTool {
      * @return mixed
      */
     public static function httpRequestWithCache($url, $method = 'get', $fields = [], $curlSets = [], $retry = 0) {
-        $url = $url . '?' . http_build_query($fields);
+        if(strpos($url, '?') === false) $url .= '?';
+        $url .= http_build_query($fields);
         if($cache = \DB::table('html')->where('url', $url)->get()[0]) {
             if($cache->html) {
                 return $cache->html;
@@ -279,7 +282,7 @@ final class IOTool {
         }
 
         do {
-            $html = self::httpRequest($url, $method = 'get', $fields = [], $curlSets = []);
+            $html = self::httpRequest($url, $method = 'get', $fields, $curlSets);
             if($html) {
                 DbTool::saveOnField('Crawler\Common\Models\Html', [
                     'url' => $url,
