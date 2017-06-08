@@ -1,4 +1,5 @@
 <?php
+
 namespace hzkoala\DevTool;
 
 use Illuminate\Support\Facades\Cache;
@@ -193,9 +194,10 @@ final class IOTool {
      * @param array $data
      * @param string $msg
      * @param int $code
+     * @param string $url
      * @return array
      */
-    public static function ApiReturn($status, $data = [], $msg = '', $code = null) {
+    public static function ApiReturn($status, $data = [], $msg = '', $code = 0, $url = '') {
         $status = boolval($status);
 
         return [
@@ -203,6 +205,7 @@ final class IOTool {
             'code' => $status ? 0 : $code,
             'msg' => $status ? '成功' : $msg,
             'data' => $data,
+            'url' => $url,
         ];
     }
 
