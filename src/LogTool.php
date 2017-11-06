@@ -184,7 +184,7 @@ class LogTool {
         }
 
         // 记录日志
-        $msg = date('Y-m-d H:i:s') . "\t" . $GLOBALS['trace_id'] . "\t" . (is_string($data) ? $data : json_encode($data));
+        $msg = date('Y-m-d H:i:s') . "\t" . (is_string($data) ? $data : json_encode($data));
         error_log($msg, 3, $file);
     }
 }
