@@ -1,4 +1,5 @@
 <?php
+
 namespace hzkoala\DevTool;
 final class GlobalTool {
 
@@ -32,6 +33,7 @@ final class GlobalTool {
      *
      * @param mixed $data
      * @param string $debugMode
+     * @return bool
      */
     public static function debugData($data, $debugMode = 'print_r') {
         // 线上只能使用log模式
@@ -41,19 +43,22 @@ final class GlobalTool {
 
         // 不同类型
         switch($debugMode) {
-            case 'var_dump': {
-                var_dump($data);
-                break;
-            }
-            case 'print_r': {
-                print_r($data);
-                break;
-            }
+            case 'var_dump':
+                {
+                    var_dump($data);
+                    break;
+                }
+            case 'print_r':
+                {
+                    print_r($data);
+                    break;
+                }
             case 'log':
-            default: {
-                LogTool::log('debug/debug', $data);
-                break;
-            }
+            default:
+                {
+                    LogTool::log('debug/debug', $data);
+                    break;
+                }
         }
     }
 

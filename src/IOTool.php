@@ -217,6 +217,7 @@ final class IOTool {
      * @param string $name
      * @param string|number $value
      * @return string
+     * @throws \Throwable
      */
     public static function InputSnippet($attr, $name, $value = null) {
         return view('module.input', ['attr' => $attr, 'name' => $name, 'value' => $value])->render();
@@ -285,7 +286,7 @@ final class IOTool {
         }
 
         do {
-            $html = self::httpRequest($url, $method = 'get', $fields, $curlSets);
+            $html = self::httpRequest($url, $method, $fields, $curlSets);
             if($html) {
                 DbTool::saveOnField('Crawler\Common\Models\Html', [
                     'url' => $url,

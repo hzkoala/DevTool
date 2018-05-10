@@ -1,8 +1,9 @@
 <?php
+
 namespace hzkoala\DevTool;
 final class FileTool {
 
-    public static $extension2ContentTypeMap = array(
+    public static $extension2ContentTypeMap = [
         '*' => 'application/octet-stream',
         '001' => 'application/x-001',
         '323' => 'text/h323',
@@ -348,7 +349,7 @@ final class FileTool {
         'ipa' => 'application/vnd.iphone',
         'xap' => 'application/x-silverlight-app',
         'zip' => 'application/x-zip-compressed',
-    );
+    ];
 
 
     /**

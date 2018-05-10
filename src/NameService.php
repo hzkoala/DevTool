@@ -11,6 +11,7 @@ class NameService {
      * @param string $service
      * @param array $params
      * @return mixed
+     * @throws \Exception
      */
     public static function request($system, $service, $params) {
         # check

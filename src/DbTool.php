@@ -1,4 +1,5 @@
 <?php
+
 namespace hzkoala\DevTool;
 
 use Illuminate\Support\Facades\DB;
@@ -38,6 +39,7 @@ final class DbTool {
      *
      * @param array $queryCond
      * @return array
+     * @throws \Exception
      */
     public static function query($queryCond) {
         # check
@@ -59,6 +61,7 @@ final class DbTool {
         }
 
         // groupBy
+        $select = '';
         if($queryCond['groupBy'] && is_array($queryCond['groupBy'])) {
             foreach($queryCond['groupBy'] as $groupBy) {
                 $query->groupBy($groupBy);
@@ -86,9 +89,9 @@ final class DbTool {
     /**
      * 存在则返回ID, 否则新建
      *
-     * @param $modelName
-     * @param $field
-     * @param $uniqueKey
+     * @param string $modelName
+     * @param array $field
+     * @param array $uniqueKey
      * @return object
      */
     public static function saveOnField($modelName, $field, $uniqueKey) {
