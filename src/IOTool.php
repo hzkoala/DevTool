@@ -3,6 +3,7 @@
 namespace hzkoala\DevTool;
 
 use Illuminate\Support\Facades\Cache;
+use Rinfo\Crawler\Models\Html;
 
 final class IOTool {
 
@@ -279,7 +280,7 @@ final class IOTool {
     public static function httpRequestWithCache($url, $method = 'get', $fields = [], $curlSets = [], $retry = 0) {
         if(strpos($url, '?') === false) $url .= '?';
         $url .= http_build_query($fields);
-        if($cache = \DB::table('html')->where('url', $url)->get()[0]) {
+        if($cache = Html::where('url', $url)->get()[0]) {
             if($cache->html) {
                 return $cache->html;
             }
@@ -288,7 +289,7 @@ final class IOTool {
         do {
             $html = self::httpRequest($url, $method, $fields, $curlSets);
             if($html) {
-                DbTool::saveOnField('Crawler\Common\Models\Html', [
+                DbTool::saveOnField('Rinfo\Crawler\Models\Html', [
                     'url' => $url,
                     'html' => $html,
                 ], ['url']);
