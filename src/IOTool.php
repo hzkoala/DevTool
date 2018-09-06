@@ -278,6 +278,7 @@ final class IOTool {
      * @return mixed
      */
     public static function httpRequestWithCache($url, $method = 'get', $fields = [], $curlSets = [], $retry = 0) {
+        $_url = $url;
         if(strpos($url, '?') === false) $url .= '?';
         $url .= http_build_query($fields);
         if($cache = Html::where('url', $url)->get()[0]) {
@@ -287,7 +288,7 @@ final class IOTool {
         }
 
         do {
-            $html = self::httpRequest($url, $method, $fields, $curlSets);
+            $html = self::httpRequest($_url, $method, $fields, $curlSets);
             if($html) {
                 DbTool::saveOnField('Rinfo\Crawler\Models\Html', [
                     'url' => $url,
