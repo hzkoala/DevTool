@@ -266,40 +266,4 @@ final class IOTool {
         return $res;
     }
 
-
-    /**
-     * HTTP请求(先取缓存)
-     *
-     * @param string $url
-     * @param string $method
-     * @param array $fields
-     * @param array $curlSets
-     * @param int $retry
-     * @return mixed
-     */
-    public static function httpRequestWithCache($url, $method = 'get', $fields = [], $curlSets = [], $retry = 0) {
-        $_url = $url;
-        if(strpos($url, '?') === false) $url .= '?';
-        $url .= http_build_query($fields);
-        if($cache = Html::where('url', $url)->get()[0]) {
-            if($cache->html) {
-                return $cache->html;
-            }
-        }
-
-        do {
-            $html = self::httpRequest($_url, $method, $fields, $curlSets);
-            if($html) {
-                DbTool::saveOnField('Rinfo\Crawler\Models\Html', [
-                    'url' => $url,
-                    'html' => $html,
-                ], ['url']);
-            } else {
-                sleep(1);
-            }
-        } while(!$html && $retry--);
-
-        # return
-        return $html;
-    }
 }
