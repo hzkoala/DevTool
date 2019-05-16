@@ -40,7 +40,7 @@ class NameService {
         $ret = file_get_contents($url);
         GlobalTool::checkException($ret, '请求ServiceList失败');
 
-        return json_decode($ret, TRUE);
+        return json_decode($ret, true);
     }
 
 

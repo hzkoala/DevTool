@@ -1,4 +1,5 @@
 <?php
+
 namespace hzkoala\DevTool;
 
 use Illuminate\Support\Facades\Route;
@@ -13,7 +14,7 @@ class LogTool {
      * 输入日志
      */
     public static function logInput() {
-        $logInfo = array(
+        $logInfo = [
             'EVENT' => 'BEGIN',
             'SYSTEM' => Config::get('app.sys.name'),
             'ENV' => $GLOBALS['env'],
@@ -22,8 +23,8 @@ class LogTool {
             'SESSION_ID' => session_id(),
             'URL' => Request::url(),
             'URI' => Route::getCurrentRoute()->uri(),
-            'REQUEST' => Input::all()
-        );
+            'REQUEST' => Input::all(),
+        ];
 
         $actionName = str_replace('@', '/', Route::currentRouteAction());
         self::log($actionName, $logInfo);
@@ -36,14 +37,14 @@ class LogTool {
      * @param mixed $response
      */
     public static function logOutput($response) {
-        $logInfo = array(
+        $logInfo = [
             'EVENT' => 'END',
             'SYSTEM' => Config::get('app.sys.name'),
             'ENV' => $GLOBALS['env'],
             'TRACE_ID' => $GLOBALS['trace_id'],
             'SESSION_ID' => session_id(),
-            'RESPONSE' => $response
-        );
+            'RESPONSE' => $response,
+        ];
 
         if($_SERVER['SCRIPT_NAME'] != 'artisan') {
             $logInfo['ACTION'] = Route::currentRouteAction();
@@ -61,15 +62,15 @@ class LogTool {
      * @param string $message
      */
     public static function logError($trace, $message) {
-        $logInfo = array(
+        $logInfo = [
             'EVENT' => 'ERROR',
             'SYSTEM' => Config::get('app.sys.name'),
             'ENV' => $GLOBALS['env'],
             'TRACE_ID' => $GLOBALS['trace_id'],
             'SESSION_ID' => session_id(),
             'MESSAGE' => $message,
-            'TRACE' => $trace
-        );
+            'TRACE' => $trace,
+        ];
 
         if($_SERVER['SCRIPT_NAME'] != 'artisan') {
             $logInfo['ACTION'] = Route::currentRouteAction();
@@ -83,13 +84,13 @@ class LogTool {
      * 找不到页面日志(404)
      */
     public static function logMiss() {
-        $logInfo = array(
+        $logInfo = [
             'EVENT' => 'MISS',
             'SYSTEM' => Config::get('app.sys.name'),
             'ENV' => $GLOBALS['env'],
             'URL' => Request::url(),
             'SESSION_ID' => session_id(),
-        );
+        ];
 
         self::log('error/miss', $logInfo);
     }
@@ -105,7 +106,7 @@ class LogTool {
      * @param $response
      */
     public static function logApi($system, $service, $spendTime, $request, $response) {
-        $logInfo = array(
+        $logInfo = [
             'EVENT' => 'API',
             'SYSTEM' => Config::get('app.sys.name'),
             'ENV' => $GLOBALS['env'],
@@ -114,8 +115,8 @@ class LogTool {
             'SERVICE' => "{$system}-{$service}",
             'SPEND_TIME' => $spendTime,
             'REQUEST' => $request,
-            'RESPONSE' => $response
-        );
+            'RESPONSE' => $response,
+        ];
 
         self::log("api/{$system}-{$service}", $logInfo);
     }
@@ -125,12 +126,12 @@ class LogTool {
      * 业务点日志
      */
     public static function logBiz() {
-        $saveList = array(
+        $saveList = [
             'utm_source',
             'utm_medium',
             'utm_term',
-            'atscreative'
-        );
+            'atscreative',
+        ];
 
         foreach($saveList as $item) {
             if(Input::get($item)) {
@@ -141,7 +142,7 @@ class LogTool {
             }
         }
 
-        $logInfo = array(
+        $logInfo = [
             'TIME' => date('Y-m-d H:i:s'),
             'IP' => IOTool::getIP(),
             'SESSION_ID' => session_id(),
@@ -152,8 +153,8 @@ class LogTool {
             'UTM_SOURCE' => $data['utm_source'],
             'UTM_MEDIUM' => $data['utm_medium'],
             'UTM_TERM' => $data['utm_term'],
-            'ATS_CREATIVE' => $data['atscreative']
-        );
+            'ATS_CREATIVE' => $data['atscreative'],
+        ];
 
         self::log("biz/biz", $logInfo);
     }
@@ -172,7 +173,7 @@ class LogTool {
         // 目录不存在则建立目录
         $dir = storage_path() . '/logs/' . $dir;
         if(!file_exists($dir)) {
-            mkdir($dir, 0777, TRUE);
+            mkdir($dir, 0777, true);
             chmod($dir, 0777);
         }
 

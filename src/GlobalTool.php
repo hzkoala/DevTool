@@ -1,6 +1,7 @@
 <?php
 
 namespace hzkoala\DevTool;
+
 final class GlobalTool {
 
     /**
@@ -24,7 +25,7 @@ final class GlobalTool {
      * @return string
      */
     public static function generateTraceId() {
-        return md5(microtime(TRUE));
+        return md5(microtime(true));
     }
 
 
@@ -38,7 +39,7 @@ final class GlobalTool {
     public static function debugData($data, $debugMode = 'print_r') {
         // 线上只能使用log模式
         if($GLOBALS['env'] == 'online' && $debugMode != 'log') {
-            return FALSE;
+            return false;
         }
 
         // 不同类型
@@ -71,7 +72,7 @@ final class GlobalTool {
      * @param bool $isSort
      * @return mixed
      */
-    public static function setArrayKey($array, $key, $isSort = FALSE) {
+    public static function setArrayKey($array, $key, $isSort = false) {
         $arr = array();
         foreach($array as $v) {
             $arr[trim($v[$key])] = $v;
@@ -93,7 +94,7 @@ final class GlobalTool {
     public static function getDomainFromUrl($url) {
         $ret = preg_match('~(^|/{2})([\w\.]+)($|/)~', $url, $match);
 
-        return $ret ? $match[2] : FALSE;
+        return $ret ? $match[2] : false;
     }
 
 

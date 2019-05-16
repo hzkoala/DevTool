@@ -22,7 +22,7 @@ final class IOTool {
         $ip = null;
         foreach($dataList as $data) {
             if(isset($data) && $data && strcasecmp($data, 'unknown')) {
-                if(strpos($data, ',') !== FALSE) {
+                if(strpos($data, ',') !== false) {
                     $ip = explode(',', $data)[0];
                 } else {
                     $ip = $data;
@@ -57,35 +57,35 @@ final class IOTool {
         }
 
         # action
-        $req = array(
-            'params' => json_encode(array(
+        $req = [
+            'params' => json_encode([
                 'trace_id' => $GLOBALS['trace_id'] ?: GlobalTool::generateTraceId(),
                 'data' => $request
-            ))
-        );
+            ]),
+        ];
 
-        $startTime = microtime(TRUE);
+        $startTime = microtime(true);
         do {
             $response = NameService::request($system, $service, $req);
             $isRetry = !$response && $retry--;
         } while($isRetry);
-        $endTime = microtime(TRUE);
+        $endTime = microtime(true);
         LogTool::logApi($system, $service, $endTime - $startTime, $request, $response);
 
         # return
         if(!$response) {
-            return FALSE;
+            return false;
         }
 
-        $response = json_decode($response, TRUE);
+        $response = json_decode($response, true);
         if(!is_array($response) || !$response['status']) {
-            return FALSE;
+            return false;
         } else {
             // 有需要则存储缓存
             if($cacheTime) {
                 Cache::put($cacheKey, $response['data'], $cacheTime);
             }
-            return $response['data'] ?: TRUE;
+            return $response['data'] ?: true;
         }
     }
 
@@ -102,7 +102,7 @@ final class IOTool {
      * @param string $method
      * @return mixed
      */
-    public static function request($system, $service, $request = array(), $retry = 0, $cacheTime = 0, $cacheKey = '', $method = 'get') {
+    public static function request($system, $service, $request = [], $curlSets = [], $retry = 0, $cacheTime = 0, $cacheKey = '', $method = 'get') {
         # cache
         // 有需要则取缓存
         if($cacheTime) {
@@ -113,13 +113,13 @@ final class IOTool {
         }
 
         # data
-        $startTime = microtime(TRUE);
-        $url = \Config::get("api.http.{$system}.{$service}");
+        $startTime = microtime(true);
+        $url = \Config::get("api.{$system}.base") . \Config::get("api.{$system}.service.{$service}");
         do {
-            $response = self::httpRequest($url, $method, $request);
+            $response = self::httpRequest($url, $method, $request, $curlSets);
             $isRetry = !$response && $retry--;
         } while($isRetry);
-        $endTime = microtime(TRUE);
+        $endTime = microtime(true);
         LogTool::logApi($system, $service, $endTime - $startTime, array(
             'url' => $url,
             'params' => $request
@@ -127,7 +127,7 @@ final class IOTool {
 
         # return
         if(!$response) {
-            return FALSE;
+            return false;
         } else {
             // 有需要则存储缓存
             if($cacheTime) {
@@ -155,7 +155,7 @@ final class IOTool {
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
         } else {
-            if(strpos($url, '?') !== FALSE) {
+            if(strpos($url, '?') !== false) {
                 foreach($fields as $k => $v) {
                     $url .= "&{$k}={$v}";
                 }
