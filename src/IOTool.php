@@ -153,7 +153,11 @@ final class IOTool {
 
         if(strtolower($method) == 'post') {
             curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+            if(in_array('Content-Type:application/json;charset=UTF-8', (array)$curlSets[CURLOPT_HTTPHEADER])) {
+                curl_setopt($ch, CURLOPT_POSTFIELDS, is_string($fields) ? $fields : json_encode($fields));
+            } else {
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+            }
         } else {
             if(strpos($url, '?') !== false) {
                 foreach($fields as $k => $v) {
